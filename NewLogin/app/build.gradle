@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        NewLogin {
+            keyAlias 'lessocc'
+            keyPassword 'Lesso123'
+            storeFile file('E:/img/NewLogin/app/keystore_Lesso123.jks')
+            storePassword 'Lesso123'
+        }
+    }
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
+    useLibrary 'org.apache.http.legacy'
+    defaultConfig {
+        applicationId "im.jizhu.com.newlogin"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+
+            moduleName "huazict"         //生成的so名字
+
+            //设置支持的SO库架构
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        mybuildType {
+            debuggable false
+            jniDebuggable false
+            signingConfig signingConfigs.NewLogin
+            renderscriptDebuggable false
+            minifyEnabled false
+            zipAlignEnabled true
+        }
+    }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
+    task nativeLibsToJar(type: Zip, description: "create a jar archive of the native libs") {
+        destinationDir file("$projectDir/libs")
+        baseName "Native_Libs2"
+        extension "jar"
+        from fileTree(dir: "libs", include: "**/*.so")
+        into "lib"
+    }
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn(nativeLibsToJar)
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    testCompile 'junit:junit:4.12'
+    compile files('libs/android-async-http-1.4.6.jar')
+    // 日志模块
+    compile project(':liblogger')
+    // IM网络库
+    compile project(':libnetwork')
+    // 调试模块
+    compile project(':libdebugger')
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'org.apache.httpcomponents:httpcore:4.4.2'
+    compile 'de.greenrobot:greendao:1.3.7'
+    compile files('libs/kengso.jar')
+}

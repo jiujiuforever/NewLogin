@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/NewLogin.iml" filepath="$PROJECT_DIR$/NewLogin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/daogenerator/daogenerator.iml" filepath="$PROJECT_DIR$/daogenerator/daogenerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libdebugger/libdebugger.iml" filepath="$PROJECT_DIR$/libdebugger/libdebugger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/liblogger/liblogger.iml" filepath="$PROJECT_DIR$/liblogger/liblogger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libnetwork/libnetwork.iml" filepath="$PROJECT_DIR$/libnetwork/libnetwork.iml" />
+    </modules>
+  </component>
+</project>

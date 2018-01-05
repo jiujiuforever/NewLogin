@@ -1,0 +1,68 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "GIT_COMMIT", "\"" + getGitCommit() + "\""
+        buildConfigField "String", "SVN_COMMIT", "\"" + getSvnRevision() + "\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+// 获取SVN Commit号
+import org.tmatesoft.svn.core.wc.*
+def getSvnRevision() {
+    try{
+        ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+        SVNClientManager clientManager = SVNClientManager.newInstance(options);
+        SVNStatusClient statusClient = clientManager.getStatusClient();
+        SVNStatus status = statusClient.doStatus(projectDir, false);
+        SVNRevision revision = status.getCommittedRevision();
+        return revision.getNumber();
+    } catch (Exception e){
+        e.printStackTrace();
+        return "";
+    }
+}
+
+// 获取Git Commit号
+def getGitCommit() {
+    try {
+        def cmd = 'git log -n 1 --pretty=format:%H'
+        def gitVersion = cmd.execute().text.substring(0, 8)
+        return gitVersion;
+    }catch (Exception e){
+        e.printStackTrace();
+        return "";
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    testCompile 'junit:junit:4.12'
+
+    // Facebook调试工具，~通过chrome来查看android数据库。
+    // http://facebook.github.io/stetho/
+    compile 'com.facebook.stetho:stetho:1.5.0'
+
+    // 手势晃动
+    compile 'com.squareup:seismic:1.0.2'
+}
