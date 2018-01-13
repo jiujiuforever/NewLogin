@@ -13,79 +13,99 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 /**
  * Master of DAO (schema version 12): knows all DAOs.
-*/
+ */
 public class DaoMaster extends AbstractDaoMaster {
-    public static final int SCHEMA_VERSION = 12;
+    //public static final int SCHEMA_VERSION = 14;
+    public static final int SCHEMA_VERSION = 17;
 
-    /** Creates underlying database table using DAOs. */
-    public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
-        AttachDao.createTable(db, ifNotExists);
-        UserInfoDao.createTable(db, ifNotExists);
-        UserKeyDao.createTable(db, ifNotExists);
-        UserValueDao.createTable(db, ifNotExists);
-        UserNameDao.createTable(db, ifNotExists);
-        DepartDao.createTable(db, ifNotExists);
-        AccountDao.createTable(db, ifNotExists);
-        StatusDao.createTable(db, ifNotExists);
+    /**
+     * Creates underlying database table using DAOs.
+     */
+    public static void createAllTables(SQLiteDatabase db, boolean ifNotExists,boolean isDiscover) {
+        if(isDiscover){
+            AppDao.createTable(db, ifNotExists);
+        }else {
+            DepartmentDao.createTable(db, ifNotExists);
+            UserDao.createTable(db, ifNotExists);
+            GroupDao.createTable(db, ifNotExists);
+            MessageDao.createTable(db, ifNotExists);
+            SessionDao.createTable(db, ifNotExists);
+            ContactInfoDao.createTable(db, ifNotExists);
+            UserStatusInfoDao.createTable(db, ifNotExists);
+            CollectionInfoDao.createTable(db, ifNotExists);
+            ScheduleDao.createTable(db, ifNotExists);
+        }
+
     }
-    
-    /** Drops underlying database table using DAOs. */
+
+    /**
+     * Drops underlying database table using DAOs.
+     */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
-        AttachDao.dropTable(db, ifExists);
-        UserInfoDao.dropTable(db, ifExists);
-        UserKeyDao.dropTable(db, ifExists);
-        UserValueDao.dropTable(db, ifExists);
-        UserNameDao.dropTable(db, ifExists);
-        DepartDao.dropTable(db, ifExists);
-        AccountDao.dropTable(db, ifExists);
-        StatusDao.dropTable(db, ifExists);
+        DepartmentDao.dropTable(db, ifExists);
+        UserDao.dropTable(db, ifExists);
+        GroupDao.dropTable(db, ifExists);
+        MessageDao.dropTable(db, ifExists);
+        SessionDao.dropTable(db, ifExists);
+        ContactInfoDao.dropTable(db, ifExists);
+        UserStatusInfoDao.dropTable(db, ifExists);
+        CollectionInfoDao.dropTable(db, ifExists);
+        ScheduleDao.dropTable(db, ifExists);
     }
-    
-    public static abstract class OpenHelper extends SQLiteOpenHelper {
 
+    public static abstract class OpenHelper extends SQLiteOpenHelper {
+    private boolean isDiscover;//发现时单独的数据库，只有两张表
         public OpenHelper(Context context, String name, CursorFactory factory) {
             super(context, name, factory, SCHEMA_VERSION);
+            if(name.contains("app")){
+                isDiscover=true;
+            }
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
             Log.i("greenDAO", "Creating tables for schema version " + SCHEMA_VERSION);
-            createAllTables(db, false);
+            createAllTables(db, false,isDiscover);
         }
+
     }
-    
-    /** WARNING: Drops all table on Upgrade! Use only during development. */
+
+    /**
+     * WARNING: Drops all table on Upgrade! Use only during development.
+     */
     public static class DevOpenHelper extends OpenHelper {
         public DevOpenHelper(Context context, String name, CursorFactory factory) {
             super(context, name, factory);
+
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
-            dropAllTables(db, true);
-            onCreate(db);
+
         }
     }
 
+
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(AttachDao.class);
-        registerDaoClass(UserInfoDao.class);
-        registerDaoClass(UserKeyDao.class);
-        registerDaoClass(UserValueDao.class);
-        registerDaoClass(UserNameDao.class);
-        registerDaoClass(DepartDao.class);
-        registerDaoClass(AccountDao.class);
-        registerDaoClass(StatusDao.class);
+        registerDaoClass(DepartmentDao.class);
+        registerDaoClass(UserDao.class);
+        registerDaoClass(GroupDao.class);
+        registerDaoClass(MessageDao.class);
+        registerDaoClass(SessionDao.class);
+        registerDaoClass(ContactInfoDao.class);
+        registerDaoClass(UserStatusInfoDao.class);
+        registerDaoClass(CollectionInfoDao.class);
+        registerDaoClass(ScheduleDao.class);
+        registerDaoClass(AppDao.class);
     }
-    
+
     public DaoSession newSession() {
         return new DaoSession(db, IdentityScopeType.Session, daoConfigMap);
     }
-    
+
     public DaoSession newSession(IdentityScopeType type) {
         return new DaoSession(db, type, daoConfigMap);
     }
-    
+
 }

@@ -1,0 +1,7 @@
+<resources>
+    <!-- top bar -->
+
+    <dimen name="top_bar_default_height">49dp</dimen>
+    <dimen name="top_title_size">20sp</dimen>
+
+</resources>

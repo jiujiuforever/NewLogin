@@ -122,12 +122,12 @@ public class DBInterface {
         return daoSession;
     }
 
-    //用户信息插入与更新
-    public long InsertOrUpdateUserInfo(UserInfoEntity userInfoEntity) {
-        UserInfoDao dao = openReadableLessoDb().getUserInfoDao();
-        long pkId = dao.insertOrReplace(userInfoEntity);
-        return pkId;
-    }
+//    //用户信息插入与更新
+//    public long InsertOrUpdateUserInfo(UserInfoEntity userInfoEntity) {
+//        UserInfoDao dao = openReadableLessoDb().getUserInfoDao();
+//        long pkId = dao.insertOrReplace(userInfoEntity);
+//        return pkId;
+//    }
 
     /**
      * getReadableDatabase()并不是以只读方式打开数据库，而是先执行getWritableDatabase()，失败的情况下才调用。

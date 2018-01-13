@@ -436,7 +436,7 @@ public class IMLoginManager extends IMManager {
 //        userInfoEntity.setAvatar(userinfo.g().getId());
         userInfoEntity.setDepart(userinfo.getDepartinfo().getGuid());
         userInfoEntity.setStatus(userinfo.getStatusinfo().getId());
-        DBInterface.instance().InsertOrUpdateUserInfo(userInfoEntity);
+//        DBInterface.instance().InsertOrUpdateUserInfo(userInfoEntity);
     }
 
 

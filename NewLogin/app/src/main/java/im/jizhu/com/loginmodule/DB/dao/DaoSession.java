@@ -2,14 +2,15 @@ package im.jizhu.com.loginmodule.DB.dao;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import im.jizhu.com.loginmodule.DB.entity.AccountEntity;
-import im.jizhu.com.loginmodule.DB.entity.AttachEntity;
-import im.jizhu.com.loginmodule.DB.entity.DepartEntity;
-import im.jizhu.com.loginmodule.DB.entity.StatusEntity;
-import im.jizhu.com.loginmodule.DB.entity.UserInfoEntity;
-import im.jizhu.com.loginmodule.DB.entity.UserKeyEntity;
-import im.jizhu.com.loginmodule.DB.entity.UserNameEntity;
-import im.jizhu.com.loginmodule.DB.entity.UserValueEntity;
+import im.jizhu.com.loginmodule.DB.entity.AppEntity;
+import im.jizhu.com.loginmodule.DB.entity.CollectionEntity;
+import im.jizhu.com.loginmodule.DB.entity.DepartmentEntity;
+import im.jizhu.com.loginmodule.DB.entity.GroupEntity;
+import im.jizhu.com.loginmodule.DB.entity.MessageEntity;
+import im.jizhu.com.loginmodule.DB.entity.ScheduleEntity;
+import im.jizhu.com.loginmodule.DB.entity.SessionEntity;
+import im.jizhu.com.loginmodule.DB.entity.UserEntity;
+import im.jizhu.com.loginmodule.DB.entity.UserStatusEntity;
 
 import java.util.Map;
 
@@ -22,117 +23,131 @@ import de.greenrobot.dao.internal.DaoConfig;
 
 /**
  * {@inheritDoc}
- * 
+ *
  * @see AbstractDaoSession
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig attachDaoConfig;
-    private final DaoConfig userInfoDaoConfig;
-    private final DaoConfig userKeyDaoConfig;
-    private final DaoConfig userValueDaoConfig;
-    private final DaoConfig userNameDaoConfig;
-    private final DaoConfig departDaoConfig;
-    private final DaoConfig accountDaoConfig;
-    private final DaoConfig statusDaoConfig;
+    private final DaoConfig departmentDaoConfig;
+    private final DaoConfig userDaoConfig;
+    private final DaoConfig groupDaoConfig;
+    private final DaoConfig messageDaoConfig;
+    private final DaoConfig sessionDaoConfig;
+    private final DaoConfig userStatusInfoDaoConfig;
+    private final DaoConfig collectionInfoDaoConfig;
+    private final DaoConfig scheduleDaoConfig;
+    private final DaoConfig appDaoConfig;
 
-    private final AttachDao attachDao;
-    private final UserInfoDao userInfoDao;
-    private final UserKeyDao userKeyDao;
-    private final UserValueDao userValueDao;
-    private final UserNameDao userNameDao;
-    private final DepartDao departDao;
-    private final AccountDao accountDao;
-    private final StatusDao statusDao;
 
+    private final DepartmentDao departmentDao;
+    private final UserDao userDao;
+    private final GroupDao groupDao;
+    private final MessageDao messageDao;
+    private final SessionDao sessionDao;
+    private final UserStatusInfoDao userStatusInfoDao;
+    private final CollectionInfoDao collectionInfoDao;
+    private final ScheduleDao scheduleDao;
+    private final AppDao appDao;
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
 
-        attachDaoConfig = daoConfigMap.get(AttachDao.class).clone();
-        attachDaoConfig.initIdentityScope(type);
+        departmentDaoConfig = daoConfigMap.get(DepartmentDao.class).clone();
+        departmentDaoConfig.initIdentityScope(type);
 
-        userInfoDaoConfig = daoConfigMap.get(UserInfoDao.class).clone();
-        userInfoDaoConfig.initIdentityScope(type);
+        userDaoConfig = daoConfigMap.get(UserDao.class).clone();
+        userDaoConfig.initIdentityScope(type);
 
-        userKeyDaoConfig = daoConfigMap.get(UserKeyDao.class).clone();
-        userKeyDaoConfig.initIdentityScope(type);
+        groupDaoConfig = daoConfigMap.get(GroupDao.class).clone();
+        groupDaoConfig.initIdentityScope(type);
 
-        userValueDaoConfig = daoConfigMap.get(UserValueDao.class).clone();
-        userValueDaoConfig.initIdentityScope(type);
+        messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
+        messageDaoConfig.initIdentityScope(type);
 
-        userNameDaoConfig = daoConfigMap.get(UserNameDao.class).clone();
-        userNameDaoConfig.initIdentityScope(type);
+        sessionDaoConfig = daoConfigMap.get(SessionDao.class).clone();
+        sessionDaoConfig.initIdentityScope(type);
 
-        departDaoConfig = daoConfigMap.get(DepartDao.class).clone();
-        departDaoConfig.initIdentityScope(type);
+        userStatusInfoDaoConfig = daoConfigMap.get(UserStatusInfoDao.class).clone();
+        userStatusInfoDaoConfig.initIdentityScope(type);
 
-        accountDaoConfig = daoConfigMap.get(AccountDao.class).clone();
-        accountDaoConfig.initIdentityScope(type);
+        collectionInfoDaoConfig = daoConfigMap.get(CollectionInfoDao.class).clone();
+        collectionInfoDaoConfig.initIdentityScope(type);
 
-        statusDaoConfig = daoConfigMap.get(StatusDao.class).clone();
-        statusDaoConfig.initIdentityScope(type);
+        scheduleDaoConfig = daoConfigMap.get(ScheduleDao.class).clone();
+        scheduleDaoConfig.initIdentityScope(type);
 
-        attachDao = new AttachDao(attachDaoConfig, this);
-        userInfoDao = new UserInfoDao(userInfoDaoConfig, this);
-        userKeyDao = new UserKeyDao(userKeyDaoConfig, this);
-        userValueDao = new UserValueDao(userValueDaoConfig, this);
-        userNameDao = new UserNameDao(userNameDaoConfig, this);
-        departDao = new DepartDao(departDaoConfig, this);
-        accountDao = new AccountDao(accountDaoConfig, this);
-        statusDao = new StatusDao(statusDaoConfig, this);
+        appDaoConfig = daoConfigMap.get(AppDao.class).clone();
+        appDaoConfig.initIdentityScope(type);
 
-        registerDao(AttachEntity.class, attachDao);
-        registerDao(UserInfoEntity.class, userInfoDao);
-        registerDao(UserKeyEntity.class, userKeyDao);
-        registerDao(UserValueEntity.class, userValueDao);
-        registerDao(UserNameEntity.class, userNameDao);
-        registerDao(DepartEntity.class, departDao);
-        registerDao(AccountEntity.class, accountDao);
-        registerDao(StatusEntity.class, statusDao);
+
+
+        departmentDao = new DepartmentDao(departmentDaoConfig, this);
+        userDao = new UserDao(userDaoConfig, this);
+        groupDao = new GroupDao(groupDaoConfig, this);
+        messageDao = new MessageDao(messageDaoConfig, this);
+        sessionDao = new SessionDao(sessionDaoConfig, this);
+        userStatusInfoDao = new UserStatusInfoDao(userStatusInfoDaoConfig,this);
+        collectionInfoDao = new CollectionInfoDao(collectionInfoDaoConfig, this);
+        scheduleDao = new ScheduleDao(scheduleDaoConfig, this);
+        appDao = new AppDao(appDaoConfig, this);
+
+
+        registerDao(DepartmentEntity.class, departmentDao);
+        registerDao(UserEntity.class, userDao);
+        registerDao(GroupEntity.class, groupDao);
+        registerDao(MessageEntity.class, messageDao);
+        registerDao(SessionEntity.class, sessionDao);
+        registerDao(UserStatusEntity.class,userStatusInfoDao);
+        registerDao(CollectionEntity.class, collectionInfoDao);
+        registerDao(ScheduleEntity.class, scheduleDao);
+        registerDao(AppEntity.class, appDao);
+
     }
-    
+
     public void clear() {
-        attachDaoConfig.getIdentityScope().clear();
-        userInfoDaoConfig.getIdentityScope().clear();
-        userKeyDaoConfig.getIdentityScope().clear();
-        userValueDaoConfig.getIdentityScope().clear();
-        userNameDaoConfig.getIdentityScope().clear();
-        departDaoConfig.getIdentityScope().clear();
-        accountDaoConfig.getIdentityScope().clear();
-        statusDaoConfig.getIdentityScope().clear();
+        departmentDaoConfig.getIdentityScope().clear();
+        userDaoConfig.getIdentityScope().clear();
+        groupDaoConfig.getIdentityScope().clear();
+        messageDaoConfig.getIdentityScope().clear();
+        sessionDaoConfig.getIdentityScope().clear();
+        userStatusInfoDaoConfig.getIdentityScope().clear();
+        collectionInfoDaoConfig.getIdentityScope().clear();
+        scheduleDaoConfig.getIdentityScope().clear();
+        appDaoConfig.getIdentityScope().clear();
     }
 
-    public AttachDao getAttachDao() {
-        return attachDao;
+    public DepartmentDao getDepartmentDao() {
+        return departmentDao;
     }
 
-    public UserInfoDao getUserInfoDao() {
-        return userInfoDao;
+    public UserDao getUserDao() {
+        return userDao;
     }
 
-    public UserKeyDao getUserKeyDao() {
-        return userKeyDao;
+
+    public GroupDao getGroupDao() {
+        return groupDao;
     }
 
-    public UserValueDao getUserValueDao() {
-        return userValueDao;
+    public MessageDao getMessageDao() {
+        return messageDao;
     }
 
-    public UserNameDao getUserNameDao() {
-        return userNameDao;
+    public SessionDao getSessionDao() {
+        return sessionDao;
     }
 
-    public DepartDao getDepartDao() {
-        return departDao;
-    }
 
-    public AccountDao getAccountDao() {
-        return accountDao;
+    public UserStatusInfoDao getUserStatusInfoDao(){
+        return userStatusInfoDao;
     }
-
-    public StatusDao getStatusDao() {
-        return statusDao;
+    public CollectionInfoDao getCollectionInfoDao() {
+        return collectionInfoDao;
     }
-
+    public ScheduleDao getScheduleDao() {
+        return scheduleDao;
+    }
+    public AppDao getAppDao() {
+        return appDao;
+    }
 }

@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
         TextView textView = (TextView) findViewById(R.id.text1);
         String a = UrlConstant.accessMsgAddress();
-//        String desPwd = new String(Security.getInstance().EncryptPass("123"));
+        String desPwd = new String(Security.getInstance().EncryptPass("123"));
 //        textView.setText(new JNIUtils().getString());
         //应用开启初始化 下面这几个怎么释放 todo
         Context ctx = getApplicationContext();
